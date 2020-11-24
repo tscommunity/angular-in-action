@@ -1,0 +1,13 @@
+:host {
+  display: block;
+  width: 100%;
+
+  .waterfall-item {
+    display: inline-block;
+    position: absolute;
+    border: solid 1px #abc;
+    background-color: #aabbcc;
+    text-align: center;
+    vertical-align: middle;
+  }
+}
