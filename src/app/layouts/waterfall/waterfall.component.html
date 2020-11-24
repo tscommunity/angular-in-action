@@ -1,4 +1,7 @@
 <p>waterfall works!</p>
 <div *ngFor="let fall of falls,index as i"
-     style="left:{{fall.left}}px; top:{{fall.top}}px; width:{{fall.width}}px; height:{{fall.height}}px;"
+     [style.left]="fall.left+'px'"
+     [style.top]="fall.top+'px'"
+     [style.width]="fall.width+'px'"
+     [style.height]="fall.height+'px'"
      class="waterfall-item">fall {{i + 1}}</div>

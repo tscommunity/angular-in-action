@@ -1,5 +1,8 @@
 :host {
   display: block;
+  // Very important, waterfall container element must relative positioned,
+  // otherwise waterfall elements will absolute positioned from page begin.
+  position: relative;
   width: 100%;
 
   .waterfall-item {

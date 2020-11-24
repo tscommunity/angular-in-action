@@ -19,7 +19,7 @@ export class WaterfallComponent implements OnInit {
     const width = 330;
 
     for (let i = 0; i < 100; i++) {
-      const height = Number((Math.random() * 300).toFixed(0));
+      const height = Math.max(Number((Math.random() * 300).toFixed(0)), 50);
       this.falls.push({width, height});
     }
 

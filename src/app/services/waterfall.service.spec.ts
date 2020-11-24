@@ -16,7 +16,7 @@ describe("WaterfallService", () => {
 
     const falls: { height: number; width: number }[] = [];
     const width = 130;
-    const waterfall: Waterfall = {verticalGap: 10, width: 1000};
+    const waterfall: Waterfall = {verticalGap: 10, horizontalGap: 10, width: 1000};
     for (let i = 0; i < 13; i++) {
       const height = Number((Math.random() * 100).toFixed(0));
       falls.push({width, height});
