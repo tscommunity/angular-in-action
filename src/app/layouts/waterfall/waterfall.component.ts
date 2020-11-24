@@ -10,6 +10,7 @@ import {WaterfallService} from "../../services/waterfall.service";
 export class WaterfallComponent implements OnInit {
 
   falls: WaterfallItem[] = [];
+  height = 0;
 
   constructor(private elementRef: ElementRef,
               private waterfallService: WaterfallService) {
@@ -31,6 +32,14 @@ export class WaterfallComponent implements OnInit {
   fall(): void {
     const waterfallWidth = Number(window.getComputedStyle(this.elementRef.nativeElement).width.replace("px", ""));
     const waterfall: Waterfall = {verticalGap: 10, horizontalGap: 10, width: waterfallWidth};
-    this.falls = this.waterfallService.fall(waterfall, this.falls).reduce((pr, cr) => pr.concat(cr), []);
+    const items = this.waterfallService.fall(waterfall, this.falls);
+    this.falls = items.reduce((pr, cr) => pr.concat(cr), []);
+    const heights: number[] = [];
+    items.forEach(row => row.forEach((item, col) => {
+      heights[col] = waterfall.horizontalGap + item.height + (heights[col] || 0);
+    }));
+
+    this.height = Math.max(...heights) + waterfall.horizontalGap;
+    this.elementRef.nativeElement.style.height = `${this.height}px`;
   }
 }
