@@ -4,14 +4,12 @@
   // otherwise waterfall elements will absolute positioned from page begin.
   position: relative;
   width: 100%;
-  background-color: pink;
+  background-color: #AABBCC;
 
   .waterfall-item {
     display: inline-block;
     position: absolute;
-    border: solid 1px #abc;
-    background-color: #aabbcc;
+    background-color: #FFFFFF;
     text-align: center;
-    vertical-align: middle;
   }
 }

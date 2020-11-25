@@ -1,5 +1,5 @@
-import {Component, ElementRef, OnInit} from "@angular/core";
-import {Waterfall, WaterfallItem} from "../../models/waterfall";
+import {Component, ElementRef, OnDestroy, OnInit} from "@angular/core";
+import {WaterfallItem} from "../../models/waterfall";
 import {WaterfallService} from "../../services/waterfall.service";
 
 @Component({
@@ -7,39 +7,76 @@ import {WaterfallService} from "../../services/waterfall.service";
   templateUrl: "./waterfall.component.html",
   styleUrls: ["./waterfall.component.scss"]
 })
-export class WaterfallComponent implements OnInit {
+export class WaterfallComponent implements OnInit, OnDestroy {
 
-  falls: WaterfallItem[] = [];
+  width = 0;
+
   height = 0;
 
-  constructor(private elementRef: ElementRef,
+  horizontalGap = 10;
+
+  verticalGap = 10;
+
+  falls: WaterfallItem[] = [];
+
+  constructor(private elementRef: ElementRef<HTMLElement>,
               private waterfallService: WaterfallService) {
+    this.mockFalls();
   }
 
-  ngOnInit(): void {
+  private mockFalls(): void {
     const width = 330;
 
     for (let i = 0; i < 100; i++) {
       const height = Math.max(Number((Math.random() * 300).toFixed(0)), 50);
-      this.falls.push({width, height});
+      this.falls.push({width, height, adjustedWidth: width});
     }
+  }
 
+  ngOnInit(): void {
     this.fall();
 
     window.addEventListener("resize", () => this.fall());
   }
 
   fall(): void {
-    const waterfallWidth = Number(window.getComputedStyle(this.elementRef.nativeElement).width.replace("px", ""));
-    const waterfall: Waterfall = {verticalGap: 10, horizontalGap: 10, width: waterfallWidth};
-    const items = this.waterfallService.fall(waterfall, this.falls);
-    this.falls = items.reduce((pr, cr) => pr.concat(cr), []);
+    this.width = this.elementRef.nativeElement.clientWidth;
+    console.log(`Initial width: ${this.width}`);
+    let items = this.waterfallService.fall(this, this.falls);
     const heights: number[] = [];
     items.forEach(row => row.forEach((item, col) => {
-      heights[col] = waterfall.horizontalGap + item.height + (heights[col] || 0);
+      heights[col] = this.horizontalGap + item.height + (heights[col] || 0);
     }));
 
-    this.height = Math.max(...heights) + waterfall.horizontalGap;
+    this.height = Math.max(...heights) + this.horizontalGap;
     this.elementRef.nativeElement.style.height = `${this.height}px`;
+
+    /**
+     * Tips:
+     * Because of setting height of the container element,
+     * the parent element (generally is document.body) may overflow in vertical,
+     * and the width of container element is subjected changed,
+     * so here need to recalculate the adjusted width and position.
+     */
+    const newWidth = this.elementRef.nativeElement.clientWidth;
+    const diffWidth = this.width - newWidth;
+    console.log(`New width: ${newWidth}`);
+    if (diffWidth > 0) {
+      console.log(`Recalculate size and position.`);
+      const offset = diffWidth / items[0].length;
+      items.forEach((row) => row.forEach((col, idx) => {
+        col.adjustedWidth -= offset;
+        // tslint:disable-next-line:no-non-null-assertion
+        col.left! -= idx * offset;
+      }));
+    }
+
+    this.falls = items.reduce((pr, cr) => pr.concat(cr), []);
+    items = [];
+    items.splice(0);
+  }
+
+  public ngOnDestroy(): void {
+    this.falls = [];
   }
 }

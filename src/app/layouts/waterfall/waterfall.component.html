@@ -2,6 +2,6 @@
 <div *ngFor="let fall of falls,index as i"
      [style.left]="fall.left+'px'"
      [style.top]="fall.top+'px'"
-     [style.width]="fall.width+'px'"
+     [style.width]="fall.adjustedWidth+'px'"
      [style.height]="fall.height+'px'"
      class="waterfall-item">fall {{i + 1}}</div>

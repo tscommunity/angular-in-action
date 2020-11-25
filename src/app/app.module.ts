@@ -3,18 +3,20 @@ import {NgModule} from "@angular/core";
 
 import {AppRoutingModule} from "./app-routing.module";
 import {AppComponent} from "./app.component";
-import {WaterfallComponent} from "./layouts/waterfall/waterfall.component";
 import {WaterfallDirective} from "./directives/waterfall.directive";
+import {LayoutsModule} from "./layouts/layouts.module";
+import { TestAnyComponent } from './test-any/test-any.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    WaterfallComponent,
-    WaterfallDirective
+    WaterfallDirective,
+    TestAnyComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    LayoutsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
