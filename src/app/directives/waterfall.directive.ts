@@ -92,7 +92,7 @@ export class WaterfallDirective implements OnInit, AfterViewInit, OnDestroy /*, 
         item.style.top = `${fall.top}px`;
         item.style.width = `${fall.adjustedWidth}px`;
       });
-    }, 100);
+    });
   }
 
 
